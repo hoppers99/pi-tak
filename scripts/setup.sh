@@ -326,10 +326,10 @@ do
 	fi
 done
 
-printf $info "Creating certificates for 2 users in tak/certs/files for a quick setup via TAK's import function\n"
+printf $info "Creating certificates for 1 users in tak/certs/files for a quick setup via TAK's import function\n"
 
 # Make 2 users
-$DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client ZL4ER"
+$DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client ZL4ER-TAB"
 # $DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client user2"
 $DOCKER_COMPOSE exec tak bash -c "chown -R 1000:1000 /opt/tak/certs/"
 
