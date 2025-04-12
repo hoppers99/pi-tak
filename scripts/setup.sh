@@ -259,22 +259,22 @@ sed -i "s%\`awk '/MemTotal/ {print \$2}' /proc/meminfo\`%$mem%g" tak/setenv.sh
 
 if [ -z "$country" ];
 then
-	country="GB"
+	country="NZ"
 fi
 
 if [ -z "$state" ];
 then
-	state="Warwickshire"
+	state="Hawke's Bay"
 fi
 
 if [ -z "$city" ];
 then
-	city="Coventry" # British joke
+	city="Napier"
 fi
 
 if [ -z "$orgunit" ];
 then
-	orgunit="TAK"
+	orgunit="Tactical Response Team"
 fi
 
 # Update local env
@@ -329,8 +329,8 @@ done
 printf $info "Creating certificates for 2 users in tak/certs/files for a quick setup via TAK's import function\n"
 
 # Make 2 users
-$DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client user1"
-$DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client user2"
+$DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client ZL4ER"
+# $DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client user2"
 $DOCKER_COMPOSE exec tak bash -c "chown -R 1000:1000 /opt/tak/certs/"
 
 ./scripts/certDP.sh $IP user1
