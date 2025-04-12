@@ -7,3 +7,8 @@ originalWAR/
 chatbot/
 server.pref
 manifest.xml
+
+# Directories for runtime data
+var/lib/headcale/*
+etc/letsencrypt/*
+etc/npm/*
