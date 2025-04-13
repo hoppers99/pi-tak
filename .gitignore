@@ -12,3 +12,5 @@ manifest.xml
 var/lib/headcale/*
 etc/letsencrypt/*
 etc/npm/*
+var/lib/headcale/*
+var/lib/postgresql/data/*
