@@ -333,8 +333,8 @@ $DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client ZL4E
 # $DOCKER_COMPOSE exec tak bash -c "cd /opt/tak/certs && ./makeCert.sh client user2"
 $DOCKER_COMPOSE exec tak bash -c "chown -R 1000:1000 /opt/tak/certs/"
 
-./scripts/certDP.sh $IP user1
-./scripts/certDP.sh $IP user2
+./scripts/certDP.sh $IP ZL4ER-TAB
+# ./scripts/certDP.sh $IP user2
 
 printf $info "Waiting for TAK server to connect to DB. This should loop several times only...\n"
 #$DOCKER_COMPOSE start tak

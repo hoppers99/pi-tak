@@ -64,41 +64,41 @@ services:
     #   caddy.handle_path.1_reverse_proxy: '{{upstreams http 80}}'
 
 
-  # db:
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/amd64/Dockerfile.takserver-db
-  #   container_name: tak-postgres
-  #   volumes:
-  #     - "./var/lib/postgresql/data:/var/lib/postgresql/data:z"
-  #     - "./opt/tak:/opt/tak:z"
-  #   networks:
-  #     tak:
-  #       aliases:
-  #         - tak-database
-  #   restart: unless-stopped
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/amd64/Dockerfile.takserver-db
+    container_name: tak-postgres
+    volumes:
+      - "./var/lib/postgresql/data:/var/lib/postgresql/data:z"
+      - "./opt/tak:/opt/tak:z"
+    networks:
+      tak:
+        aliases:
+          - tak-database
+    restart: unless-stopped
 
-  # tak:
-  #   build:
-  #     context: .
-  #     dockerfile: ./docker/amd64/Dockerfile.takserver
-  #   container_name: tak-server
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - "./opt/tak:/opt/tak:z"
-  #   ports:
-  #     - "8443:8443"
-  #     - "8444:8444"
-  #     - "8446:8446"
-  #     - "8089:8089"
-  #     - "9000:9000"
-  #     - "9001:9001"
-  #   networks:
-  #     tak:
-  #   depends_on:
-  #     - db
-  #   restart: unless-stopped
+  tak:
+    build:
+      context: .
+      dockerfile: ./docker/amd64/Dockerfile.takserver
+    container_name: tak-server
+    env_file:
+      - .env
+    volumes:
+      - "./opt/tak:/opt/tak:z"
+    ports:
+      - "8443:8443"
+      - "8444:8444"
+      - "8446:8446"
+      - "8089:8089"
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      tak:
+    depends_on:
+      - db
+    restart: unless-stopped
 
 
 networks:
