@@ -71,7 +71,7 @@ services:
     container_name: tak-postgres
     volumes:
       - "./var/lib/postgresql/data:/var/lib/postgresql/data:z"
-      - "./opt/tak:/opt/tak:z"
+      - "./tak:/opt/tak:z"
     networks:
       tak:
         aliases:
@@ -86,7 +86,7 @@ services:
     env_file:
       - .env
     volumes:
-      - "./opt/tak:/opt/tak:z"
+      - "./tak:/opt/tak:z"
     ports:
       - "8443:8443"
       - "8444:8444"
