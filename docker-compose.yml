@@ -1,37 +1,107 @@
 services:
-  db:
-    build:
-      context: .
-      dockerfile: ./docker/amd64/Dockerfile.takserver-db
-    volumes:
-      - "db_data:/var/lib/postgresql/data:z"
-      - "./tak:/opt/tak:z"
-    networks:
-      tak:
-        aliases:
-          - tak-database
+  npm:
+    image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
-  tak:
-    build:
-      context: .
-      dockerfile: ./docker/amd64/Dockerfile.takserver
-    env_file:
-      - .env
-    volumes:
-      - "./tak:/opt/tak:z"
     ports:
-      - "8443:8443"
-      - "8444:8444"
-      - "8446:8446"
-      - "8089:8089"
-      - "9000:9000"
-      - "9001:9001"
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./etc/npm/data:/data
+      - ./etc/letsencrypt:/etc/letsencrypt
     networks:
-      tak:
-    depends_on:
-      - db
+      - proxy
+    environment:
+      DISABLE_IPV6: 'true'
+
+  # caddy:
+  #   container_name: caddy
+  #   image: lucaslorentz/caddy-docker-proxy:ci-alpine
+  #   restart: unless-stopped
+  #   environment:
+  #     - CADDY_INGRESS_NETWORKS=tak
+  #   networks:
+  #     - proxy
+  #   ports:
+  #     - '80:80'
+  #     - '443:443'
+  #   volumes:
+  #     - ./etc/caddy/data:/data
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
+  headscale:
+    image: headscale/headscale:0.25.1
+    container_name: headscale
     restart: unless-stopped
+    environment:
+      - TZ=Pacific/Auckland
+    volumes:
+      #      - ./conf:/etc/headscale
+      - ./etc/headscale/config.yaml:/etc/headscale/config.yaml
+      #      - headscale-data:/var/lib/headscale
+      - ./var/lib/headscale:/var/lib/headscale
+    entrypoint: headscale serve
+    networks:
+      - tak
+    ports:
+      - '8080:8080'
+      # - 443:443
+    labels:
+      caddy: vpn.4er.nz
+      caddy.reverse_proxy: '{{upstreams 8080}}'
+
+  headscale-admin:
+    image: goodieshq/headscale-admin:latest
+    container_name: headscale-admin
+    restart: unless-stopped
+    networks:
+      - tak
+    ports:
+      - '8081:80'
+    labels:
+      caddy: vpn.4er.nz
+      caddy.handle_path: /admin/*
+      caddy.handle_path.0_rewrite: '* /admin{uri}'
+      caddy.handle_path.1_reverse_proxy: '{{upstreams http 80}}'
+
+
+  # db:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/amd64/Dockerfile.takserver-db
+  #   volumes:
+  #     - "./var/lib/postgresql/data:/var/lib/postgresql/data:z"
+  #     - "./opt/tak:/opt/tak:z"
+  #   networks:
+  #     tak:
+  #       aliases:
+  #         - tak-database
+  #   restart: unless-stopped
+
+  # tak:
+  #   build:
+  #     context: .
+  #     dockerfile: ./docker/amd64/Dockerfile.takserver
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - "./opt/tak:/opt/tak:z"
+  #   ports:
+  #     - "8443:8443"
+  #     - "8444:8444"
+  #     - "8446:8446"
+  #     - "8089:8089"
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   networks:
+  #     tak:
+  #   depends_on:
+  #     - db
+  #   restart: unless-stopped
+
+
 volumes:
   db_data:
+
 networks:
   tak:
