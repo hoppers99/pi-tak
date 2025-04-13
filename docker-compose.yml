@@ -10,7 +10,7 @@ services:
       - ./etc/npm/data:/data
       - ./etc/letsencrypt:/etc/letsencrypt
     networks:
-      - proxy
+      - tak
     environment:
       DISABLE_IPV6: 'true'
 
