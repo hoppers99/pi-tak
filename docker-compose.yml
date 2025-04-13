@@ -1,6 +1,7 @@
 services:
   npm:
     image: 'jc21/nginx-proxy-manager:latest'
+    container_name: tak-npm
     restart: unless-stopped
     ports:
       - '80:80'
@@ -31,7 +32,7 @@ services:
 
   headscale:
     image: headscale/headscale:0.25.1
-    container_name: headscale
+    container_name: tak-headscale
     restart: unless-stopped
     environment:
       - TZ=Pacific/Auckland
@@ -52,7 +53,7 @@ services:
 
   headscale-admin:
     image: goodieshq/headscale-admin:latest
-    container_name: headscale-admin
+    container_name: tak-headscale-admin
     restart: unless-stopped
     networks:
       - tak
